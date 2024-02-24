@@ -8,7 +8,7 @@ supabase: Client = create_client(url, key)
 def add_path(new_data):
   if check_exists(new_data["fname"], new_data["lname"]):
     return []
-  data = supabase.table("Pathologist").insert({new_data}).execute()
+  data = supabase.table("Pathologist").insert(new_data).execute()
   return data.data[0] if data else []
 
 def get_pathologists():
