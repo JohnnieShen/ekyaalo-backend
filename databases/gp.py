@@ -25,4 +25,4 @@ def check_exists(fname, lname):
       data = supabase.table("General Practitioner").select("*").eq("fname", fname).eq("lname", lname).execute()
       return len(data.data) > 0
     except:
-      return False  
+      return False

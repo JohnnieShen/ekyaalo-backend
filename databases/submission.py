@@ -19,7 +19,6 @@ def get_submissions():
   except:
     return []
 
-
 # get the submissions taken by a specific operator
 def get_submission(id):
   try:

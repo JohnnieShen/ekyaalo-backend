@@ -18,7 +18,13 @@ def get_operators():
 def get_operator_by_id(path_id):
   data = supabase.table("Operator").select("*").eq("id", path_id).execute()
   return data.data[0] if data.data else {}
-  
+
+def login_operator(fname, lname):
+  data = supabase.table("Operator").select("*").eq("fname", fname).eq("lname", lname).execute()
+  if not data.data: # create the user
+    return add_operator({"fname": fname, "lname": lname})
+  return data.data[0]
+
 # Helper functions
 def check_exists(fname, lname):
     try:

@@ -1,13 +1,13 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
-from databases.operator import add_operator, get_operators, get_operator_by_id
+from databases.operator import add_operator, get_operators, get_operator_by_id, login_operator
 from schemas import OperatorSchema
 
 blp = Blueprint("operators", __name__, description="Operations on operators")
 
 @blp.route("/operator")
-class Submission(MethodView):
+class Operator(MethodView):
   @blp.arguments(OperatorSchema)
   @blp.response(201, OperatorSchema)
   def post(self, new_data):
@@ -26,11 +26,20 @@ class Submission(MethodView):
     return response
   
 @blp.route("/operator/<int:operator_id>")
-class OperatorById(MethodView):
+class Operator(MethodView):
   @blp.response(200, OperatorSchema)
   def get(self, operator_id):
     result = get_operator_by_id(operator_id)
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
-  
+
+@blp.route("/operator/login")
+class Operator(MethodView):
+  @blp.arguments(OperatorSchema)
+  @blp.response(200, OperatorSchema)
+  def get(self, new_data):
+    result = login_operator(new_data["fname"], new_data["lname"])
+    response = make_response(result)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
