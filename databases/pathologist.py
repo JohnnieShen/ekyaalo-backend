@@ -6,6 +6,8 @@ key = os.environ.get("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
 def add_path(new_data):
+  if check_exists(new_data["fname"], new_data["lname"]):
+    return []
   try:
     data = supabase.table("Pathologist").insert(new_data).execute()
     return data.data
@@ -25,3 +27,11 @@ def get_pathologist_by_id(path_id):
     return data.data[0]
   except:
     return {}
+  
+# Helper functions
+def check_exists(fname, lname):
+    try:
+      data = supabase.table("Pathologist").select("*").eq("fname", fname).eq("lname", lname).execute()
+      return len(data.data) > 0
+    except:
+      return False  
