@@ -2,6 +2,11 @@ from flask import Flask
 from flask_cors import CORS
 from flask_smorest import Api
 from resources.patient import blp as PatientBlueprint
+from resources.submission import blp as SubmissionBlueprint
+from resources.operator import blp as OperatorBlueprint
+from resources.pathologist import blp as PathologistBlueprint
+from resources.hc import blp as HealthCenterBlueprint
+from resources.gp import blp as GPBlueprint
 app = Flask(__name__)
 
 CORS(app)
@@ -16,3 +21,8 @@ app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-
 
 api = Api(app)
 api.register_blueprint(PatientBlueprint)
+api.register_blueprint(SubmissionBlueprint)
+api.register_blueprint(OperatorBlueprint)
+api.register_blueprint(PathologistBlueprint)
+api.register_blueprint(HealthCenterBlueprint)
+api.register_blueprint(GPBlueprint)

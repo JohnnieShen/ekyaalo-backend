@@ -1,8 +1,5 @@
 import os
 from supabase import create_client, Client
-from datetime import date
-from heapq import *
-import threading
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")

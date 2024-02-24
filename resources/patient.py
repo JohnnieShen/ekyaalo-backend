@@ -13,7 +13,7 @@ class Patient(MethodView):
   def post(self, new_data):
     result = add_patient(new_data)
     if not result:
-      abort(400, message = "Username already exists")
+      abort(400, message = "Patient already exists")
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
@@ -37,4 +37,3 @@ class Patient(MethodView):
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
-
