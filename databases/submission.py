@@ -126,3 +126,23 @@ def upload_image(data):
     "sub_id": sub_id,
     "failed_images": failed_imgs
   }
+
+def retrieve_images(data):
+  sub_id = data['sub_id']
+  data = supabase.table("Submission").select("*").eq("sub_id", sub_id).execute()
+  if len(data.data) == 0:
+    return "Submission does not exist"
+  img_nums = data.data[0]['assoc_images']
+  print(img_nums)
+  img_list = []
+  for i,num in enumerate(img_nums):
+    cur_slide = []
+    for j in range(num):
+      img_name = str(sub_id) + "_" + str(i+1) + "_" + str(j+1) + ".jpeg"
+      # retrieve the image and convert to base64
+      img_download = supabase.storage.from_('testing').download(img_name)
+      base64_encoded = base64.b64encode(img_download).decode('utf-8')
+      cur_slide.append(base64_encoded)
+    img_list.append(cur_slide)
+  return img_list
+  

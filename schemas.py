@@ -87,3 +87,6 @@ class SubmissionFormSchema(Schema):
 class ImageUploadSchema(Schema):
     image_list = fields.List(fields.List(fields.Str()), required=True)
     sub_id = fields.Int(required=True)
+
+class ImageRetrieveSchema(Schema):
+    sub_id = fields.Int(required=True)

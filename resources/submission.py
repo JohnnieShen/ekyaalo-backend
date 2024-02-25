@@ -3,8 +3,8 @@ from flask import request, jsonify
 from flask_smorest import Blueprint, abort
 from flask import make_response
 
-from databases.submission import get_submissions, get_submission, add_submission, upload_image, fill_submission
-from schemas import SubmissionSchema, SubmissionFormSchema, ImageUploadSchema
+from databases.submission import get_submissions, get_submission, add_submission, upload_image, fill_submission, retrieve_images
+from schemas import SubmissionSchema, SubmissionFormSchema, ImageUploadSchema, ImageRetrieveSchema
 
 blp = Blueprint("submissions", __name__, description="Operations on submissions")
 
@@ -54,6 +54,15 @@ class Submission(MethodView):
   @blp.arguments(ImageUploadSchema)
   def post(self, data):
     result = upload_image(data)
+    if result == "Submission does not exist":
+      abort(400, message = "Submission does not exist")
+    response = make_response(result)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
+  @blp.arguments(ImageRetrieveSchema)
+  def get(self, data):
+    result = retrieve_images(data)
     if result == "Submission does not exist":
       abort(400, message = "Submission does not exist")
     response = make_response(result)
