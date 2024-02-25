@@ -59,7 +59,7 @@ class GPSchema(Schema):
     email = fields.Str()
     phone_number = fields.Str()
 
-class SubmissionForm(Schema):
+class SubmissionFormSchema(Schema):
     # explicit form fields
     patient_fname = fields.Str(required=True)
     patient_lname = fields.Str(required=True)
@@ -74,8 +74,8 @@ class SubmissionForm(Schema):
     race = fields.Str()
     clinical_workup = fields.Str()
     stain = fields.Str()
-    req_phys_fname = fields.Int(required=True)
-    req_phys_lname = fields.Int(required=True)
+    req_phys_fname = fields.Str(required=True)
+    req_phys_lname = fields.Str(required=True)
     date = fields.Str(required=True)
     specimen = fields.Str(required=True)
 
@@ -83,5 +83,3 @@ class SubmissionForm(Schema):
     operator_id = fields.Int(required=True)
     hc_id = fields.Int(required=True)
     operator_dx = fields.Str(required=True)
-
-

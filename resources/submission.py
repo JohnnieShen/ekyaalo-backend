@@ -1,8 +1,8 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
-from databases.submission import get_submissions, get_submission, add_submission, upload_image
-from schemas import SubmissionSchema
+from databases.submission import get_submissions, get_submission, add_submission, upload_image, fill_submission
+from schemas import SubmissionSchema, SubmissionFormSchema
 
 blp = Blueprint("submissions", __name__, description="Operations on submissions")
 
@@ -31,6 +31,17 @@ class Submission(MethodView):
   def get(self, id):
     result = get_submission(id)
     # upload_image(None)
+    response = make_response(result)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+  
+@blp.route("/submission/upload")
+class Submission(MethodView):
+  @blp.arguments(SubmissionFormSchema)
+  @blp.response(200, SubmissionFormSchema)
+  def post(self, new_data):
+    # upload_image(None)
+    result = fill_submission(new_data)
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
