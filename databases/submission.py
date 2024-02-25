@@ -99,18 +99,21 @@ def fill_submission(new_data):
   
 
 def upload_image(data):
+  sub_id = data['sub_id']
+  image_list = data['image_list']
   try:
-        base64_image = data.get('base64_image')
-
+    for i in range(len(image_list)):
+      for j in range(len(image_list[i])):
+        base64_image = image_list[i][j]
         if base64_image:
             image_data = base64.b64decode(base64_image)
-            # image = Image.open(BytesIO(image_data))
-
-            p = str(uuid.uuid4()) + ".jpeg"
-            response = supabase.storage.from_('testing').upload(file=image_data, path = p, file_options={"content-type": "image/jpeg"})
-
-            return {"message": "Image received and processed successfully"}
+            image_name = str(sub_id) + "_" + str(i+1) + "_" + str(j+1) + ".jpeg"
+            response = supabase.storage.from_('testing').upload(file=image_data, path = image_name, file_options={"content-type": "image/jpeg"})
+            print(response)
         else:
-            return {"error": "Invalid base64 image data"}, 400
+          continue
+
+    return {"message": "Image received and processed successfully"}
+  
   except Exception as e:
       return {"error": str(e)}, 500

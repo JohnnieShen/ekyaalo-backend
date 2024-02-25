@@ -56,15 +56,6 @@ class Submission(MethodView):
 class Submission(MethodView):
   # @blp.response(200, SubmissionFormSchema)
   def post(self):
-        # try:
-        #     photo = request.files['photo']
-        #     filename = photos.save(photo)
-        #     # Store the filename or URL in your database or Supabase storage
-        #     # ...
-
-        #     return jsonify({"message": "Image uploaded successfully"})
-        # except Exception as e:
-        #     return jsonify({"error": str(e)}), 400
     data = request.json
     result = upload_image(data)
     response = make_response(result)
