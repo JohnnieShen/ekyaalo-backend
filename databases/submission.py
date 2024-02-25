@@ -35,7 +35,6 @@ def fill_submission(new_data):
   patient_sex = new_data['patient_sex']
   patient_birthdate = new_data['patient_birthdate']
   data = supabase.table("Patient").select("*").eq('fname', patient_fname).eq('lname', patient_lname).eq('sex', patient_sex).eq('birthdate', patient_birthdate).execute()
-  print(data)
   new_patient = {
       "fname": patient_fname,
       "lname": patient_lname,
@@ -78,7 +77,6 @@ def fill_submission(new_data):
   # get the operator diagnosis
     op_dx = new_data['operator_dx']
 
-
   to_submit = {
     "patient_id": patient_id,
     "operator_id": operator_id,
@@ -90,8 +88,12 @@ def fill_submission(new_data):
     "specimen": specimen,
     "op_dx": op_dx,
   }
-  data = supabase.table("Submission").insert(to_submit).execute()
-  return data.data[0]
+  try:
+    data = supabase.table("Submission").insert(to_submit).execute()
+    return data.data[0]
+  except:
+    return []
+  
 
 def upload_image(file):
   print(supabase.storage.list_buckets())
