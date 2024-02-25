@@ -79,7 +79,11 @@ class SubmissionFormSchema(Schema):
     date = fields.Str(required=True)
     specimen = fields.Str(required=True)
 
-    # implicit from state, AI
+    # implicit from state, ML model
     operator_id = fields.Int(required=True)
     hc_id = fields.Int(required=True)
     operator_dx = fields.Str(required=True)
+
+
+class ImageUploadSchema(Schema):
+    photo = fields.Field(required=True)
