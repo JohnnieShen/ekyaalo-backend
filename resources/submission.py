@@ -49,15 +49,13 @@ class Submission(MethodView):
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
   
-
-# photos = UploadSet('photos', IMAGES)
-
 @blp.route("/submission/upload/image")
 class Submission(MethodView):
-  # @blp.response(200, SubmissionFormSchema)
-  def post(self):
-    data = request.json
+  @blp.arguments(ImageUploadSchema)
+  def post(self, data):
     result = upload_image(data)
+    if result == "Submission does not exist":
+      abort(400, message = "Submission does not exist")
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response

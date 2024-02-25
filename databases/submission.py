@@ -97,23 +97,32 @@ def fill_submission(new_data):
   except:
     return []
   
-
 def upload_image(data):
   sub_id = data['sub_id']
   image_list = data['image_list']
-  try:
-    for i in range(len(image_list)):
-      for j in range(len(image_list[i])):
-        base64_image = image_list[i][j]
-        if base64_image:
+  # first need to check if the submission exists
+  data = supabase.table("Submission").select("*").eq('sub_id', sub_id).execute()
+  if len(data.data) == 0:
+    return "Submission does not exist"
+  img_nums = []
+  failed_imgs = []
+  for i in range(len(image_list)):
+    img_nums.append(len(image_list[i]))
+    for j in range(len(image_list[i])):
+      base64_image = image_list[i][j]
+      if base64_image:
+          try:
             image_data = base64.b64decode(base64_image)
             image_name = str(sub_id) + "_" + str(i+1) + "_" + str(j+1) + ".jpeg"
             response = supabase.storage.from_('testing').upload(file=image_data, path = image_name, file_options={"content-type": "image/jpeg"})
-            print(response)
-        else:
-          continue
-
-    return {"message": "Image received and processed successfully"}
+          except Exception as e:
+            failed_imgs.append(str(i+1) + "_" + str(j+1))
+      else:
+        failed_imgs.append(str(i+1) + "_" + str(j+1))
   
-  except Exception as e:
-      return {"error": str(e)}, 500
+  # update the submission row in the DB with the number of images
+  data = supabase.table("Submission").update({"assoc_images": img_nums}).eq('sub_id', sub_id).execute()
+  return {
+    "sub_id": sub_id,
+    "failed_images": failed_imgs
+  }
