@@ -106,16 +106,11 @@ def upload_image(data):
             image_data = base64.b64decode(base64_image)
             # image = Image.open(BytesIO(image_data))
 
-            p = str(uuid.uuid4()) + ".jpg"
-            response = supabase.storage.from_('testing').upload(file=image_data, path = p, file_options={"content-type": "image/jpg"})
+            p = str(uuid.uuid4()) + ".jpeg"
+            response = supabase.storage.from_('testing').upload(file=image_data, path = p, file_options={"content-type": "image/jpeg"})
 
             return {"message": "Image received and processed successfully"}
         else:
             return {"error": "Invalid base64 image data"}, 400
   except Exception as e:
       return {"error": str(e)}, 500
-  
-  # print(supabase.storage.list_buckets())
-  # file = open('test.jpg', 'rb')
-  # response = supabase.storage.from_('testing').upload(file=file, path = "test4.jpg", file_options={"content-type": "image/jpg"})
-  # print(response)
