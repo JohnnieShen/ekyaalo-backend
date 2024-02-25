@@ -30,7 +30,7 @@ class Submission(MethodView):
   @blp.response(200, SubmissionSchema(many=True))
   def get(self, id):
     result = get_submission(id)
-    upload_image(None)
+    # upload_image(None)
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response

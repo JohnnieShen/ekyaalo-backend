@@ -35,6 +35,11 @@ class OperatorSchema(Schema):
     fname = fields.Str(required=True)
     lname = fields.Str(required=True)
 
+class OperatorLoginSchema(Schema):
+    fname = fields.Str(required=True)
+    lname = fields.Str(required=True)
+    hc_name = fields.Str(required=True)
+
 class PathologistSchema(Schema):
     id = fields.Int(dump_only=True)
     fname = fields.Str(required=True)
@@ -53,3 +58,30 @@ class GPSchema(Schema):
     lname = fields.Str(required=True)
     email = fields.Str()
     phone_number = fields.Str()
+
+class SubmissionForm(Schema):
+    # explicit form fields
+    patient_fname = fields.Str(required=True)
+    patient_lname = fields.Str(required=True)
+    patient_sex = fields.Str(required=True)
+    patient_birthdate = fields.Str(required=True)
+    patient_village = fields.Str(required=True)
+    patient_email = fields.Str()
+    patient_phone_number = fields.Str()
+    kin_name = fields.Str()
+    kin_relation = fields.Str()
+    tribe = fields.Str()
+    race = fields.Str()
+    clinical_workup = fields.Str()
+    stain = fields.Str()
+    req_phys_fname = fields.Int(required=True)
+    req_phys_lname = fields.Int(required=True)
+    date = fields.Str(required=True)
+    specimen = fields.Str(required=True)
+
+    # implicit from state, AI
+    operator_id = fields.Int(required=True)
+    hc_id = fields.Int(required=True)
+    operator_dx = fields.Str(required=True)
+
+

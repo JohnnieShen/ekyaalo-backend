@@ -19,11 +19,21 @@ def get_operator_by_id(path_id):
   data = supabase.table("Operator").select("*").eq("id", path_id).execute()
   return data.data[0] if data.data else {}
 
-def login_operator(fname, lname):
-  data = supabase.table("Operator").select("*").eq("fname", fname).eq("lname", lname).execute()
-  if not data.data: # create the user
-    return add_operator({"fname": fname, "lname": lname})
-  return data.data[0]
+def login_operator(fname, lname, hc_name):
+  op_exists = supabase.table("Operator").select("*").eq("fname", fname).eq("lname", lname).execute()
+
+  if not op_exists.data: # create the user
+    op_exists = add_operator({"fname": fname, "lname": lname})
+  else:
+    op_exists = op_exists.data[0]
+  
+  op_fname = op_exists["fname"]
+  op_lname = op_exists["lname"]
+  op_id = op_exists["id"]
+
+  hc_exists = supabase.table("Health Center").select("*").eq("name", hc_name).execute()
+  hc_id = hc_exists.data[0]["id"]
+  return {"fname": op_fname, "lname": op_lname, "hc_id": hc_id, "op_id": op_id, "hc_name": hc_name}
 
 # Helper functions
 def check_exists(fname, lname):
