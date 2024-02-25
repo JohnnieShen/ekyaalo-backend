@@ -40,6 +40,8 @@ class Operator(MethodView):
   @blp.response(200, OperatorSchema)
   def get(self, new_data):
     result = login_operator(new_data["fname"], new_data["lname"], new_data["hc_name"])
+    if not result:
+      abort(400, message = "Failed to login operator. The Health Center may not exist.")
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response

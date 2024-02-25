@@ -32,9 +32,12 @@ def login_operator(fname, lname, hc_name):
   op_id = op_exists["id"]
 
   hc_exists = supabase.table("Health Center").select("*").eq("name", hc_name).execute()
-  hc_id = hc_exists.data[0]["id"]
-  return {"fname": op_fname, "lname": op_lname, "hc_id": hc_id, "op_id": op_id, "hc_name": hc_name}
-
+  try:
+    hc_id = hc_exists.data[0]["id"]
+    return {"fname": op_fname, "lname": op_lname, "hc_id": hc_id, "op_id": op_id, "hc_name": hc_name}
+  except:
+    return []
+  
 # Helper functions
 def check_exists(fname, lname):
     try:
