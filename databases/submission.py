@@ -29,7 +29,7 @@ def get_submission(id):
 
 
 def upload_image(file):
-  print(res = supabase.storage.list_buckets())
+  print(supabase.storage.list_buckets())
   file = open('test.jpg', 'rb')
   response = supabase.storage.from_('testing').upload(file=file, path = "test4.jpg", file_options={"content-type": "image/jpg"})
   print(response)
