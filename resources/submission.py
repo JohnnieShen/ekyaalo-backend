@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
-from databases.submission import get_submissions, get_submission, add_submission
+from databases.submission import get_submissions, get_submission, add_submission, upload_image
 from schemas import SubmissionSchema
 
 blp = Blueprint("submissions", __name__, description="Operations on submissions")
@@ -30,6 +30,7 @@ class Submission(MethodView):
   @blp.response(200, SubmissionSchema(many=True))
   def get(self, id):
     result = get_submission(id)
+    upload_image(None)
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response

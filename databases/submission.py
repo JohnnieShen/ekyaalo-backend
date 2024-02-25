@@ -26,3 +26,9 @@ def get_submission(id):
     return data.data
   except:
     return []
+
+
+def upload_image(file):
+  file = open('test.jpg', 'rb')
+  response = supabase.storage.from_('testing').upload(file=file, path = "test3.jpg", file_options={"content-type": "image/jpg"})
+  print(response)
