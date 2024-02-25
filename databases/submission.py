@@ -28,7 +28,6 @@ def get_submission(id):
     return []
   
 def fill_submission(new_data):
-  ## explicit form fields
   # use to check if there is a patient with the same name, sex, birthdate
   patient_fname = new_data['patient_fname']
   patient_lname = new_data['patient_lname']
@@ -54,28 +53,28 @@ def fill_submission(new_data):
     data = supabase.table("Patient").update(new_patient).eq('fname', patient_fname).eq('lname', patient_lname).eq('sex', patient_sex).eq('birthdate', patient_birthdate).execute()
   
   # get the patient id
-    patient_id = data.data[0]['id']
+  patient_id = data.data[0]['id']
   # get the operator id
-    operator_id = new_data['operator_id']
+  operator_id = new_data['operator_id']
   # get the health center id
-    hc_id = new_data['hc_id']
+  hc_id = new_data['hc_id']
   # get the request physician id
-    data = supabase.table("General Practitioner").select("*").eq('fname', new_data['req_phys_fname']).eq('lname', new_data['req_phys_lname']).execute()
-    if len(data.data) == 0:
-      data = supabase.table("General Practitioner").insert({"fname": new_data['req_phys_fname'], "lname": new_data['req_phys_lname']}).execute()
-      req_phys_id = data.data[0]['id']
-    else:
-      req_phys_id = data.data[0]['id']
+  data = supabase.table("General Practitioner").select("*").eq('fname', new_data['req_phys_fname']).eq('lname', new_data['req_phys_lname']).execute()
+  if len(data.data) == 0:
+    data = supabase.table("General Practitioner").insert({"fname": new_data['req_phys_fname'], "lname": new_data['req_phys_lname']}).execute()
+    req_phys_id = data.data[0]['id']
+  else:
+    req_phys_id = data.data[0]['id']
   # get the date
-    date = new_data['date']
+  date = new_data['date']
   # get the clinical workup
-    clinical_workup = new_data.get('clinical_workup', None)
+  clinical_workup = new_data.get('clinical_workup', None)
   # get the stain
-    stain = new_data.get('stain', None)
+  stain = new_data.get('stain', None)
   # get the specimen
-    specimen = new_data['specimen']
+  specimen = new_data['specimen']
   # get the operator diagnosis
-    op_dx = new_data['operator_dx']
+  op_dx = new_data['operator_dx']
 
   to_submit = {
     "patient_id": patient_id,
