@@ -8,6 +8,7 @@ import uuid
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
+bucket_name = "testing"
 
 def add_submission(data):
   try:
@@ -114,7 +115,7 @@ def upload_image(data):
           try:
             image_data = base64.b64decode(base64_image)
             image_name = str(sub_id) + "_" + str(i+1) + "_" + str(j+1) + ".jpeg"
-            response = supabase.storage.from_('testing').upload(file=image_data, path = image_name, file_options={"content-type": "image/jpeg"})
+            response = supabase.storage.from_(bucket_name).upload(file=image_data, path = image_name, file_options={"content-type": "image/jpeg"})
           except Exception as e:
             failed_imgs.append(str(i+1) + "_" + str(j+1))
       else:
@@ -133,16 +134,19 @@ def retrieve_images(data):
   if len(data.data) == 0:
     return "Submission does not exist"
   img_nums = data.data[0]['assoc_images']
-  print(img_nums)
   img_list = []
   for i,num in enumerate(img_nums):
     cur_slide = []
     for j in range(num):
       img_name = str(sub_id) + "_" + str(i+1) + "_" + str(j+1) + ".jpeg"
       # retrieve the image and convert to base64
-      img_download = supabase.storage.from_('testing').download(img_name)
+      img_download = supabase.storage.from_(bucket_name).download(img_name)
       base64_encoded = base64.b64encode(img_download).decode('utf-8')
       cur_slide.append(base64_encoded)
     img_list.append(cur_slide)
-  return img_list
+  return {
+    "img_list": img_list,
+    "sub_id": sub_id,
+    "assoc_images": img_nums
+  }
   
