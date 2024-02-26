@@ -3,7 +3,7 @@ from flask import request, jsonify
 from flask_smorest import Blueprint, abort
 from flask import make_response
 
-from databases.submission import get_submissions, get_submission, add_submission, upload_image, fill_submission, retrieve_images
+from databases.submission import get_submissions, get_submission, get_oper_submission, add_submission, upload_image, fill_submission, retrieve_images
 from schemas import SubmissionSchema, SubmissionFormSchema, ImageUploadSchema, ImageRetrieveSchema
 
 blp = Blueprint("submissions", __name__, description="Operations on submissions")
@@ -27,12 +27,20 @@ class Submission(MethodView):
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
   
-@blp.route("/submission/<int:id>")
+@blp.route("/submission/operator/<int:id>")
 class Submission(MethodView):
   @blp.response(200, SubmissionSchema(many=True))
   def get(self, id):
+    result = get_oper_submission(id)
+    response = make_response(result)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
+@blp.route("/submission/<int:id>")
+class Submission(MethodView):
+  @blp.response(200, SubmissionSchema)
+  def get(self, id):
     result = get_submission(id)
-    # upload_image(None)
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response

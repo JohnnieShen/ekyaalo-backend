@@ -25,10 +25,17 @@ def get_submissions():
     return []
 
 # get the submissions taken by a specific operator
-def get_submission(id):
+def get_oper_submission(id):
   try:
     data = supabase.table("Submission").select("*").eq('operator_id', id).execute()
     return data.data
+  except:
+    return []
+
+def get_submission(id):
+  try:
+    data = supabase.table("Submission").select("*").eq('sub_id', id).execute()
+    return data.data[0]
   except:
     return []
   
