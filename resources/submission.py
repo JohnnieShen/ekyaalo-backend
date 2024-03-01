@@ -68,9 +68,10 @@ class Submission(MethodView):
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
 
-  @blp.arguments(ImageRetrieveSchema)
-  def get(self, data):
-    result = retrieve_images(data)
+@blp.route("/submission/upload/image/<int:id>")
+class Submission(MethodView):
+  def get(self, id):
+    result = retrieve_images(id)
     if result == "Submission does not exist":
       abort(400, message = "Submission does not exist")
     response = make_response(result)

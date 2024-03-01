@@ -135,8 +135,8 @@ def upload_image(data):
     "failed_images": failed_imgs
   }
 
-def retrieve_images(data):
-  sub_id = data['sub_id']
+def retrieve_images(id):
+  sub_id = id
   data = supabase.table("Submission").select("*").eq("sub_id", sub_id).execute()
   if len(data.data) == 0:
     return "Submission does not exist"
