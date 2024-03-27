@@ -101,9 +101,18 @@ def fill_submission(new_data):
   }
   try:
     data = supabase.table("Submission").insert(to_submit).execute()
-    return data.data[0]
+    
   except:
     return []
+
+  # NOW UPLOAD IMAGES
+  image_upload = {
+    "sub_id": data.data[0]['sub_id'],
+    "image_list": new_data['image_list']
+  }
+  if type(upload_image(image_upload)) == str:
+    return "Image Upload Failed"
+  return data.data[0]
   
 def upload_image(data):
   sub_id = data['sub_id']
@@ -147,9 +156,12 @@ def retrieve_images(id):
     for j in range(num):
       img_name = str(sub_id) + "_" + str(i+1) + "_" + str(j+1) + ".jpeg"
       # retrieve the image and convert to base64
-      img_download = supabase.storage.from_(bucket_name).download(img_name)
-      base64_encoded = base64.b64encode(img_download).decode('utf-8')
-      cur_slide.append(base64_encoded)
+      try:
+        img_download = supabase.storage.from_(bucket_name).download(img_name)
+        base64_encoded = base64.b64encode(img_download).decode('utf-8')
+        cur_slide.append(base64_encoded)
+      except:
+        continue
     img_list.append(cur_slide)
   return {
     "img_list": img_list,

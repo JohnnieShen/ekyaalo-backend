@@ -84,6 +84,9 @@ class SubmissionFormSchema(Schema):
     hc_id = fields.Int(required=True)
     operator_dx = fields.Str(required=True)
 
+    # image list
+    image_list = fields.List(fields.List(fields.Str()), required=True)
+
 class ImageUploadSchema(Schema):
     image_list = fields.List(fields.List(fields.Str()), required=True)
     sub_id = fields.Int(required=True)
