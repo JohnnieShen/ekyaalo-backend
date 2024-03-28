@@ -29,6 +29,7 @@ class SubmissionSchema(Schema):
     path_dx = fields.Str()
     path_id = fields.Int()
     signed_date = fields.Str()
+    image_list = fields.List(fields.List(fields.Str()))
 
 class OperatorSchema(Schema):
     id = fields.Int(dump_only=True)

@@ -35,7 +35,10 @@ def get_oper_submission(id):
 def get_submission(id):
   try:
     data = supabase.table("Submission").select("*").eq('sub_id', id).execute()
-    return data.data[0]
+    result = data.data[0]
+    images = retrieve_images(id)
+    result['image_list'] = images['img_list']
+    return result
   except:
     return []
   
