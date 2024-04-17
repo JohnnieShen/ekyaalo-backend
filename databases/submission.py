@@ -8,7 +8,7 @@ import uuid
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
-bucket_name = "testing"
+bucket_name = "Beta_4-15-2024"
 
 def add_submission(data):
   try:

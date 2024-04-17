@@ -94,3 +94,42 @@ class ImageUploadSchema(Schema):
 
 class ImageRetrieveSchema(Schema):
     sub_id = fields.Int(required=True)
+
+
+class ImageSchema(Schema):
+    mag1 = fields.String(required=True) # first magnification, image as byte string
+    mag2 = fields.String() # second magnification, image as byte string
+    type = fields.String()
+
+class SlideSchema(Schema):
+    slidename = fields.String(required=True)
+    imagelist = fields.List(fields.Nested(ImageSchema()), required=True)
+
+class CollectionSchema(Schema):
+    case_id = fields.String(required=True)
+    slides = fields.List(fields.Nested(SlideSchema()), required=True)
+
+# {
+# "slidename":"slide1","imagelist":[
+#   {
+#     "imageUri": "images/media/12345",
+#     "type": ""
+#   },
+#   {
+#     "imageUri": "/images/media/67890",
+#      "type": ""
+#   }
+# ],
+# "slidename":"slide2","imagelist":[
+#   {
+#     "imageUri": "images/media/12345",
+#     "type": ""
+#   },
+#   {
+#     "imageUri": "/images/media/67890",
+#      "type": ""
+#   }
+# ],
+# }
+
+
