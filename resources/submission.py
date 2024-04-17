@@ -50,21 +50,13 @@ class Submission(MethodView):
   @blp.arguments(SubmissionFormSchema)
   @blp.response(200, SubmissionFormSchema)
   def post(self, new_data):
+    # print(new_data)
+    # response = new_data
     result = fill_submission(new_data)
     if not result:
       abort(400, message = "Failed to fill submission. Submission likely already exists for this patient on this day.")
     if type(result) == str:
       abort(400, message = "Submission created but image upload failed.")
-    response = make_response(result)
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    return response
-
-@blp.route("/submission/upload/image/<int:id>")
-class Submission(MethodView):
-  def get(self, id):
-    result = retrieve_images(id)
-    if result == "Submission does not exist":
-      abort(400, message = "Submission does not exist")
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response

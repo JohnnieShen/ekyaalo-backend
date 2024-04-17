@@ -13,7 +13,7 @@ bucket_name = "Data_Collection"
 def upload_image(img, case_no, slidename, img_num, mag, type):
   try:
     image_data = base64.b64decode(img)
-    image_name = case_no + "-" + slidename + "-" + img_num + "-" + mag + "-" + type + ".jpeg"
+    image_name = case_no + "_" + slidename + "_" + img_num + "_" + mag + "_" + type + ".jpeg"
     response = supabase.storage.from_(bucket_name).upload(file=image_data, path = image_name, file_options={"content-type": "image/jpeg"})
     return 0
   except Exception as e:

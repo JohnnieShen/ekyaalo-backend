@@ -104,48 +104,64 @@ def fill_submission(new_data):
   }
   try:
     data = supabase.table("Submission").insert(to_submit).execute()
-    
   except:
     return []
-
-  # NOW UPLOAD IMAGES
-  image_upload = {
-    "sub_id": data.data[0]['sub_id'],
-    "image_list": new_data['image_list']
-  }
-  if type(upload_image(image_upload)) == str:
-    return "Image Upload Failed"
-  return data.data[0]
   
-def upload_image(data):
-  sub_id = data['sub_id']
-  image_list = data['image_list']
-  # first need to check if the submission exists
-  data = supabase.table("Submission").select("*").eq('sub_id', sub_id).execute()
-  if len(data.data) == 0:
-    return "Submission does not exist"
-  img_nums = []
+  sub_id = data.data[0]['sub_id']
+  slides = new_data['images']
+  slide_upload = {}
   failed_imgs = []
-  for i in range(len(image_list)):
-    img_nums.append(len(image_list[i]))
-    for j in range(len(image_list[i])):
-      base64_image = image_list[i][j]
-      if base64_image:
-          try:
-            image_data = base64.b64decode(base64_image)
-            image_name = str(sub_id) + "_" + str(i+1) + "_" + str(j+1) + ".jpeg"
-            response = supabase.storage.from_(bucket_name).upload(file=image_data, path = image_name, file_options={"content-type": "image/jpeg"})
-          except Exception as e:
-            failed_imgs.append(str(i+1) + "_" + str(j+1))
-      else:
-        failed_imgs.append(str(i+1) + "_" + str(j+1))
+  for i,slide in enumerate(slides):
+    slidename = slide['slidename']
+    imagelist = slide['imagelist']
+    type_list = []
+    for j,image in enumerate(imagelist):
+      encoded_image = image['image']
+      type_list.append(image['type'])
+      if upload_image(encoded_image, sub_id, slidename, str(j+1), image['type']):
+        failed_imgs.append((slidename,j+1))
+    slide_upload[slidename] = type_list
+  data = supabase.table("Submission").update({"assoc_images": slide_upload}).eq('sub_id', sub_id).execute()
+  return data.data[0]
+
+def upload_image(img, sub_id, slidename, img_num, type):
+  try:
+    image_data = base64.b64decode(img)
+    image_name = str(sub_id) + "_" + slidename + "_" + img_num + "_" + type + ".jpeg"
+    response = supabase.storage.from_(bucket_name).upload(file=image_data, path = image_name, file_options={"content-type": "image/jpeg"})
+    return 0
+  except Exception as e:
+    return 1
   
-  # update the submission row in the DB with the number of images
-  data = supabase.table("Submission").update({"assoc_images": img_nums}).eq('sub_id', sub_id).execute()
-  return {
-    "sub_id": sub_id,
-    "failed_images": failed_imgs
-  }
+# def upload_image(data):
+#   sub_id = data['sub_id']
+#   image_list = data['image_list']
+#   # first need to check if the submission exists
+#   data = supabase.table("Submission").select("*").eq('sub_id', sub_id).execute()
+#   if len(data.data) == 0:
+#     return "Submission does not exist"
+#   img_nums = []
+#   failed_imgs = []
+#   for i in range(len(image_list)):
+#     img_nums.append(len(image_list[i]))
+#     for j in range(len(image_list[i])):
+#       base64_image = image_list[i][j]
+#       if base64_image:
+#           try:
+#             image_data = base64.b64decode(base64_image)
+#             image_name = str(sub_id) + "_" + str(i+1) + "_" + str(j+1) + ".jpeg"
+#             response = supabase.storage.from_(bucket_name).upload(file=image_data, path = image_name, file_options={"content-type": "image/jpeg"})
+#           except Exception as e:
+#             failed_imgs.append(str(i+1) + "_" + str(j+1))
+#       else:
+#         failed_imgs.append(str(i+1) + "_" + str(j+1))
+  
+#   # update the submission row in the DB with the number of images
+#   data = supabase.table("Submission").update({"assoc_images": img_nums}).eq('sub_id', sub_id).execute()
+#   return {
+#     "sub_id": sub_id,
+#     "failed_images": failed_imgs
+#   }
 
 def retrieve_images(id):
   sub_id = id
@@ -171,4 +187,3 @@ def retrieve_images(id):
     "sub_id": sub_id,
     "assoc_images": img_nums
   }
-  

@@ -60,6 +60,37 @@ class GPSchema(Schema):
     email = fields.Str()
     phone_number = fields.Str()
 
+
+class ImageUploadSchema(Schema):
+    image_list = fields.List(fields.List(fields.Str()), required=True)
+    sub_id = fields.Int(required=True)
+
+class ImageRetrieveSchema(Schema):
+    sub_id = fields.Int(required=True)
+
+# data collection workflow
+class CollectionImageSchema(Schema):
+    mag1 = fields.String(required=True) # first magnification, image as byte string
+    mag2 = fields.String() # second magnification, image as byte string
+    type = fields.String()
+
+class CollectionSlideSchema(Schema):
+    slidename = fields.String(required=True)
+    imagelist = fields.List(fields.Nested(CollectionImageSchema()), required=True)
+
+class CollectionSchema(Schema):
+    case_id = fields.String(required=True)
+    slides = fields.List(fields.Nested(CollectionSlideSchema()), required=True)
+
+# normal workflow
+class ImageSchema(Schema):
+    image = fields.Str(required=True)
+    type = fields.Str(required=True)
+
+class SlideSchema(Schema):
+    slidename = fields.Str(required=True)
+    imagelist = fields.List(fields.Nested(ImageSchema()), required=True)
+
 class SubmissionFormSchema(Schema):
     # explicit form fields
     patient_fname = fields.Str(required=True)
@@ -86,28 +117,11 @@ class SubmissionFormSchema(Schema):
     operator_dx = fields.Str(required=True)
 
     # image list
-    image_list = fields.List(fields.List(fields.Str()), required=True)
-
-class ImageUploadSchema(Schema):
-    image_list = fields.List(fields.List(fields.Str()), required=True)
-    sub_id = fields.Int(required=True)
-
-class ImageRetrieveSchema(Schema):
-    sub_id = fields.Int(required=True)
+    images = fields.List(fields.Nested(SlideSchema()), required=True)
 
 
-class ImageSchema(Schema):
-    mag1 = fields.String(required=True) # first magnification, image as byte string
-    mag2 = fields.String() # second magnification, image as byte string
-    type = fields.String()
 
-class SlideSchema(Schema):
-    slidename = fields.String(required=True)
-    imagelist = fields.List(fields.Nested(ImageSchema()), required=True)
 
-class CollectionSchema(Schema):
-    case_id = fields.String(required=True)
-    slides = fields.List(fields.Nested(SlideSchema()), required=True)
 
 # {
 # "slidename":"slide1","imagelist":[
