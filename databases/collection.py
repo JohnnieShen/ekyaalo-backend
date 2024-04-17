@@ -27,14 +27,17 @@ def upload_case(new_data):
   for i,slide in enumerate(slides):
     slidename = slide['slidename']
     imagelist = slide['imagelist']
-    slide_upload[slidename] = len(imagelist)
+    # slide_upload[slidename] = len(imagelist)
+    type_list = []
     for j,image in enumerate(imagelist):
       mag1 = image['mag1']
       mag2 = image['mag2']
+      type_list.append(image['type'])
       if upload_image(mag1, case_id, slidename, str(j+1), "10X", image['type']):
         failed_imgs.append((slidename,j+1,"10X"))
       if upload_image(mag2, case_id, slidename, str(j+1), "40X", image['type']):
         failed_imgs.append((slidename,j+1,"40X")) 
+    slide_upload[slidename] = type_list
   data = {
     "case_id": case_id,
     "slides": slide_upload

@@ -13,7 +13,7 @@ class DataCollection(MethodView):
   def post(self, new_data):
     result = upload_case(new_data)
     if not result:
-      abort(404, message="Failed to upload case")
+      abort(404, message="Failed to upload case. Case likely already exists.")
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
