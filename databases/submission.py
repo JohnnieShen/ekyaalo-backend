@@ -36,8 +36,7 @@ def get_submission(id):
   try:
     data = supabase.table("Submission").select("*").eq('sub_id', id).execute()
     result = data.data[0]
-    images = retrieve_images(id)
-    result['images'] = images
+    result['images'] = retrieve_images(id)
     del result['assoc_images']
     return result
   except Exception as e:
