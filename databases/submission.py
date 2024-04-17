@@ -37,9 +37,10 @@ def get_submission(id):
     data = supabase.table("Submission").select("*").eq('sub_id', id).execute()
     result = data.data[0]
     images = retrieve_images(id)
-    result['image_list'] = images['img_list']
+    result['images'] = images
+    del result['assoc_images']
     return result
-  except:
+  except Exception as e:
     return []
   
 def fill_submission(new_data):
@@ -132,58 +133,30 @@ def upload_image(img, sub_id, slidename, img_num, type):
     return 0
   except Exception as e:
     return 1
-  
-# def upload_image(data):
-#   sub_id = data['sub_id']
-#   image_list = data['image_list']
-#   # first need to check if the submission exists
-#   data = supabase.table("Submission").select("*").eq('sub_id', sub_id).execute()
-#   if len(data.data) == 0:
-#     return "Submission does not exist"
-#   img_nums = []
-#   failed_imgs = []
-#   for i in range(len(image_list)):
-#     img_nums.append(len(image_list[i]))
-#     for j in range(len(image_list[i])):
-#       base64_image = image_list[i][j]
-#       if base64_image:
-#           try:
-#             image_data = base64.b64decode(base64_image)
-#             image_name = str(sub_id) + "_" + str(i+1) + "_" + str(j+1) + ".jpeg"
-#             response = supabase.storage.from_(bucket_name).upload(file=image_data, path = image_name, file_options={"content-type": "image/jpeg"})
-#           except Exception as e:
-#             failed_imgs.append(str(i+1) + "_" + str(j+1))
-#       else:
-#         failed_imgs.append(str(i+1) + "_" + str(j+1))
-  
-#   # update the submission row in the DB with the number of images
-#   data = supabase.table("Submission").update({"assoc_images": img_nums}).eq('sub_id', sub_id).execute()
-#   return {
-#     "sub_id": sub_id,
-#     "failed_images": failed_imgs
-#   }
 
-def retrieve_images(id):
-  sub_id = id
+def retrieve_images(sub_id):
   data = supabase.table("Submission").select("*").eq("sub_id", sub_id).execute()
   if len(data.data) == 0:
     return "Submission does not exist"
   img_nums = data.data[0]['assoc_images']
-  img_list = []
-  for i,num in enumerate(img_nums):
-    cur_slide = []
-    for j in range(num):
-      img_name = str(sub_id) + "_" + str(i+1) + "_" + str(j+1) + ".jpeg"
-      # retrieve the image and convert to base64
+  ret_val = []
+
+  for slide_name, imgs in img_nums.items():
+    imagelist = []
+    for i,type in enumerate(imgs):
+      file_name = str(sub_id) + "_" + slide_name + "_" + str(i+1) + "_" + type + ".jpeg"
       try:
-        img_download = supabase.storage.from_(bucket_name).download(img_name)
+        img_download = supabase.storage.from_(bucket_name).download(file_name)
         base64_encoded = base64.b64encode(img_download).decode('utf-8')
-        cur_slide.append(base64_encoded)
+        imagelist.append({
+          "type": type,
+          "image": base64_encoded
+        })
       except:
         continue
-    img_list.append(cur_slide)
-  return {
-    "img_list": img_list,
-    "sub_id": sub_id,
-    "assoc_images": img_nums
-  }
+      to_add = {
+        "slidename": slide_name,
+        "imagelist": imagelist
+      }
+    ret_val.append(to_add)
+  return ret_val

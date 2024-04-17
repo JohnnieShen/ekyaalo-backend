@@ -41,6 +41,8 @@ class Submission(MethodView):
   @blp.response(200, SubmissionSchema)
   def get(self, id):
     result = get_submission(id)
+    if not result:
+      abort(404, message = "Submission not found.")
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
@@ -50,8 +52,6 @@ class Submission(MethodView):
   @blp.arguments(SubmissionFormSchema)
   @blp.response(200, SubmissionFormSchema)
   def post(self, new_data):
-    # print(new_data)
-    # response = new_data
     result = fill_submission(new_data)
     if not result:
       abort(400, message = "Failed to fill submission. Submission likely already exists for this patient on this day.")
