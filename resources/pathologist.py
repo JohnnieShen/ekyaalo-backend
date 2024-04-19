@@ -34,7 +34,7 @@ class PathologistById(MethodView):
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
 
-@blp.route("/pathologist/submission/update")
+@blp.route("/pathologist/submission")
 class Pathologist(MethodView):
   @blp.arguments(PathoSubmissionUpdateSchema)
   def put(self, new_data):
@@ -44,4 +44,6 @@ class Pathologist(MethodView):
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
+
+
 
