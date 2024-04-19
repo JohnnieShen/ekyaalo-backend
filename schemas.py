@@ -49,6 +49,10 @@ class PathologistSchema(Schema):
     phone_number = fields.Str()
     health_centers = fields.List(fields.Int())
 
+class PathoLoginSchema(Schema):
+    fname = fields.Str(required=True)
+    lname = fields.Str(required=True)
+
 class HealthCenterSchema(Schema):
     name = fields.Str(required=True)
     county = fields.Str(required=True)
@@ -116,3 +120,8 @@ class PathoSubmissionUpdateSchema(Schema):
     path_dx = fields.Str(required=True)
     path_id = fields.Int(required=True)
     signed_date = fields.Str(required=True)
+
+class PathoLoginSchema(Schema):
+    fname = fields.Str(required=True)
+    lname = fields.Str(required=True)
+

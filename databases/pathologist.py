@@ -36,6 +36,13 @@ def get_path_submissions(path_id):
     return "Pathologist does not exist."
   data = supabase.table("Submission").select("*").eq("path_id", path_id).execute()
   return data.data if data else []
+
+
+def login_patho(fname, lname):
+  patho_exists = supabase.table("Pathologist").select("*").eq("fname", fname).eq("lname", lname).execute()
+  if not patho_exists.data:
+    return []
+  return patho_exists.data[0]
   
 # Helper functions
 def check_exists(fname, lname):
