@@ -4,7 +4,7 @@ from flask_smorest import Blueprint, abort
 from flask import make_response
 
 from databases.submission import get_submissions, get_submission, get_oper_submission, add_submission, upload_image, fill_submission, retrieve_images
-from schemas import SubmissionSchema, SubmissionFormSchema, ImageUploadSchema, ImageRetrieveSchema
+from schemas import SubmissionSchema, SubmissionFormSchema
 
 blp = Blueprint("submissions", __name__, description="Operations on submissions")
 

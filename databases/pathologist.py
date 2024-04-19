@@ -18,6 +18,18 @@ def get_pathologists():
 def get_pathologist_by_id(path_id):
   data = supabase.table("Pathologist").select("*").eq("id", path_id).execute()
   return data.data[0] if data.data else {}
+
+def patho_update_submission(new_data):
+  if not check_path_exists(new_data["path_id"]):
+    return []
+  if not check_sub_exist(new_data["sub_id"]):
+    return []
+  signed_date = new_data["signed_date"]
+  path_id = new_data["path_id"]
+  sub_id = new_data["sub_id"]
+  path_dx = new_data["path_dx"]
+  data = supabase.table("Submission").update({"path_id": path_id, "signed_date":signed_date, "path_dx":path_dx}).eq("sub_id", sub_id).execute()
+  return data.data[0] if data.data else []
   
 # Helper functions
 def check_exists(fname, lname):
@@ -26,3 +38,18 @@ def check_exists(fname, lname):
       return len(data.data) > 0
     except:
       return False  
+
+def check_path_exists(path_id):
+  try:
+    data = supabase.table("Pathologist").select("*").eq("id", path_id).execute()
+    return len(data.data) > 0
+  except:
+    return False
+
+def check_sub_exist(sub_id):
+  try:
+    data = supabase.table("Submission").select("*").eq("sub_id", sub_id).execute()
+    return len(data.data) > 0
+  except:
+    return False
+      

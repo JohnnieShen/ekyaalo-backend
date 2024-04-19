@@ -60,14 +60,6 @@ class GPSchema(Schema):
     email = fields.Str()
     phone_number = fields.Str()
 
-
-class ImageUploadSchema(Schema):
-    image_list = fields.List(fields.List(fields.Str()), required=True)
-    sub_id = fields.Int(required=True)
-
-class ImageRetrieveSchema(Schema):
-    sub_id = fields.Int(required=True)
-
 # data collection workflow
 class CollectionImageSchema(Schema):
     mag1 = fields.String(required=True) # first magnification, image as byte string
@@ -119,31 +111,8 @@ class SubmissionFormSchema(Schema):
     # image list
     images = fields.List(fields.Nested(SlideSchema()), required=True)
 
-
-
-
-
-# {
-# "slidename":"slide1","imagelist":[
-#   {
-#     "imageUri": "images/media/12345",
-#     "type": ""
-#   },
-#   {
-#     "imageUri": "/images/media/67890",
-#      "type": ""
-#   }
-# ],
-# "slidename":"slide2","imagelist":[
-#   {
-#     "imageUri": "images/media/12345",
-#     "type": ""
-#   },
-#   {
-#     "imageUri": "/images/media/67890",
-#      "type": ""
-#   }
-# ],
-# }
-
-
+class PathoSubmissionUpdateSchema(Schema):
+    sub_id = fields.Int(required=True)
+    path_dx = fields.Str(required=True)
+    path_id = fields.Int(required=True)
+    signed_date = fields.Str(required=True)
