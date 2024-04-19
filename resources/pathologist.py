@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
-from databases.pathologist import add_path, get_pathologists, get_pathologist_by_id, patho_update_submission
+from databases.pathologist import add_path, get_pathologists, get_pathologist_by_id, patho_update_submission, get_path_submissions
 from schemas import PathologistSchema, PathoSubmissionUpdateSchema
 
 blp = Blueprint("pathologists", __name__, description="Operations on pathologists")
@@ -45,5 +45,15 @@ class Pathologist(MethodView):
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
 
+@blp.route("/pathologist/submission/<int:path_id>")
+class Pathologist(MethodView):
+  def get(self, path_id):
+    result = get_path_submissions(path_id)
+    if type(result) == str:
+      abort(400, message = result)
+    response = make_response(result)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+    
 
 

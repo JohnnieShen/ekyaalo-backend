@@ -30,6 +30,12 @@ def patho_update_submission(new_data):
   path_dx = new_data["path_dx"]
   data = supabase.table("Submission").update({"path_id": path_id, "signed_date":signed_date, "path_dx":path_dx}).eq("sub_id", sub_id).execute()
   return data.data[0] if data.data else []
+
+def get_path_submissions(path_id):
+  if not check_path_exists(path_id):
+    return "Pathologist does not exist."
+  data = supabase.table("Submission").select("*").eq("path_id", path_id).execute()
+  return data.data if data else []
   
 # Helper functions
 def check_exists(fname, lname):
