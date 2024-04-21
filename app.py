@@ -8,6 +8,7 @@ from resources.pathologist import blp as PathologistBlueprint
 from resources.hc import blp as HealthCenterBlueprint
 from resources.gp import blp as GPBlueprint
 from resources.collection import blp as CollectionBlueprint
+from resources.usability import blp as UsabilityBlueprint
 
 app = Flask(__name__)
 
@@ -29,3 +30,4 @@ api.register_blueprint(PathologistBlueprint)
 api.register_blueprint(HealthCenterBlueprint)
 api.register_blueprint(GPBlueprint)
 api.register_blueprint(CollectionBlueprint)
+api.register_blueprint(UsabilityBlueprint)

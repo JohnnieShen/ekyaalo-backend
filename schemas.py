@@ -125,3 +125,16 @@ class PathoLoginSchema(Schema):
     fname = fields.Str(required=True)
     lname = fields.Str(required=True)
 
+class UsabilityEntry(Schema):
+    captureImage = fields.List(fields.Str())
+    determineAdequacy = fields.List(fields.Str())
+    enterPatientInfo = fields.List(fields.Str())
+    login = fields.List(fields.Str())
+    navigateClusters = fields.List(fields.Str())
+    provideAction = fields.List(fields.Str())
+    reviewRecords = fields.List(fields.Str())
+    selectCluster = fields.List(fields.Str())
+    setupAndCalibration = fields.List(fields.Str())
+    stopCapture = fields.List(fields.Str())
+    syncToInternet = fields.List(fields.Str())
+    tutorial = fields.List(fields.Str())
