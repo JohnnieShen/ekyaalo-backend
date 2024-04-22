@@ -54,7 +54,7 @@ class Submission(MethodView):
   def post(self, new_data):
     result = fill_submission(new_data)
     if not result:
-      abort(400, message = "Failed to fill submission. Submission likely already exists for this patient on this day.")
+      abort(400, message = "Failed to fill submission.")
     if type(result) == str:
       abort(400, message = "Submission created but image upload failed.")
     response = make_response(result)
