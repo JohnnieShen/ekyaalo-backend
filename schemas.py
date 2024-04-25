@@ -55,7 +55,7 @@ class PathoLoginSchema(Schema):
 
 class HealthCenterSchema(Schema):
     name = fields.Str(required=True)
-    county = fields.Str(required=True)
+    county = fields.Str()
 
 class GPSchema(Schema):
     id = fields.Int(dump_only=True)
