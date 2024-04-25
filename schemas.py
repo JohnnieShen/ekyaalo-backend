@@ -105,12 +105,12 @@ class SubmissionFormSchema(Schema):
     req_phys_fname = fields.Str(required=True)
     req_phys_lname = fields.Str(required=True)
     date = fields.Str(required=True)
-    specimen = fields.Str(required=True)
+    specimen = fields.Str()
 
     # implicit from state, ML model
     operator_id = fields.Int(required=True)
     hc_id = fields.Int(required=True)
-    operator_dx = fields.Str(required=True)
+    # operator_dx = fields.Str(required=True)
 
     # image list
     images = fields.List(fields.Nested(SlideSchema()), required=True)

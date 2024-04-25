@@ -87,9 +87,7 @@ def fill_submission(new_data):
   # get the stain
   stain = new_data.get('stain', None)
   # get the specimen
-  specimen = new_data['specimen']
-  # get the operator diagnosis
-  op_dx = new_data['operator_dx']
+  specimen = new_data.get('specimen', None)
 
   to_submit = {
     "patient_id": patient_id,
@@ -100,7 +98,6 @@ def fill_submission(new_data):
     "req_phys_id": req_phys_id,
     "stain": stain,
     "specimen": specimen,
-    "op_dx": op_dx,
   }
   try:
     data = supabase.table("Submission").insert(to_submit).execute()
