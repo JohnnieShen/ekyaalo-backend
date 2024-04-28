@@ -12,9 +12,7 @@ from resources.usability import blp as UsabilityBlueprint
 
 app = Flask(__name__)
 app.config['TIMEOUT'] = 120
-
 CORS(app)
-
 
 app.config["PROPAGATE_EXCEPTIONS"] = True
 app.config["API_TITLE"] = "GymConnect API"

@@ -4,3 +4,4 @@ flask-smorest
 flask_cors
 supabase
 Pillow
+gunicorn
