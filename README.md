@@ -1,3 +1,4 @@
+# Ekyaalo Diagnostics Backend Server
 This is the repository for the Ekyaalo platform backend server. Code is written in Python, using the Flask framework with plugins like flask-smorest. The server integrates with database tables and image storage on Supabase. The application is running in production on Render.com. API endpoint documentation can be found [here](https://docs.google.com/document/d/1cxHNckffV048s5hx741CbOLmdiJUL2BM0Lep4dXkWqQ/edit#heading=h.ywff4ac9soiw).
 
 About Ekyaalo: Ekyaalo is recently grant-funded by the American Cancer Society to pursue innovations to improve the throughput, speed, and accessibility of breast cancer diagnosis particularly in the low-resource setting. The team operates at the convergence of various domains including global health, women's health, pathology, machine learning, biomedical engineering, and their intersection with software engineering and app development.
