@@ -1,9 +1,6 @@
 import os
 from supabase import create_client, Client
-from PIL import Image
 import base64
-from io import BytesIO
-from uuid import uuid4
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
